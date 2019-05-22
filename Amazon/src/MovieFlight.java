@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Scanner;
 
 /**
@@ -18,8 +19,12 @@ import java.util.Scanner;
 	Output from aonecode.com
 	[90, 125]
 	90min + 125min = 215 is the maximum number within 220 (250min - 30min)
+	
+	7 90 85 75 60 120 150 125 250
  */
 public class MovieFlight {
+	
+	//n^2 complexity
 	public static int[] findLongestDurations(int[] movieDurations, int d) {
 		int res[] = new int[2];
 		int maxDuration = 0;
@@ -35,6 +40,30 @@ public class MovieFlight {
 		}
 		return res;
 	}
+	
+	//n log n complexity (not sure if this covers every case
+	public static int[] findLongestDurations1(int[] movieDurations, int d) {
+		int res[] = new int[2];
+		int maxDuration = 0;
+		Arrays.sort(movieDurations);
+		int i = 0;
+		int j = movieDurations.length - 1;
+		while(i < j) {
+			int curDuration = movieDurations[i] + movieDurations[j]; 
+			if(curDuration <= (d - 30)) {
+				if(curDuration > maxDuration) {
+					maxDuration = curDuration;
+					res[0] = movieDurations[i];
+					res[1] = movieDurations[j];
+				}
+				i++;
+			}
+			else
+				j--;
+		}
+		return res;
+	}
+	
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
@@ -43,7 +72,7 @@ public class MovieFlight {
 			movieDurations[i] = sc.nextInt();
 		int d = sc.nextInt();
 		sc.close();
-		int[] res = findLongestDurations(movieDurations, d);
+		int[] res = findLongestDurations1(movieDurations, d);
 		System.out.println(res[0] + " " + res[1]);
 	}
 }
